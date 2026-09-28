@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>SkyView - موقع الطقس الذكي | توقعات دقيقة لأي مكان في العالم</title>
+  <meta name="description" content="SkyView موقع طقس ذكي يوفر توقعات دقيقة لأي مكان في العالم. اعرف درجة الحرارة، الرطوبة، الرياح، والضغط الجوي مع توقعات يومية بالساعة والأيام القادمة." />
+  <meta name="keywords" content="طقس, توقعات الطقس, درجة الحرارة, رطوبة, رياح, ضغط جوي, weather, forecast, temperature, humidity, wind" />
+  <meta name="author" content="SkyView Weather App" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#667eea" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SkyView - موقع الطقس الذكي" />
+  <meta property="og:description" content="توقعات طقس دقيقة لأي مكان في العالم مع معلومات مفصلة عن الرطوبة والرياح والضغط الجوي" />
+  <meta property="og:image" content="https://images.pexels.com/photos/11467524/pexels-photo-11467524.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" />
+  <meta property="og:site_name" content="SkyView Weather" />
+  <meta property="og:locale" content="ar_AR" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SkyView - موقع الطقس الذكي" />
+  <meta name="twitter:description" content="توقعات طقس دقيقة لأي مكان في العالم" />
+  <meta name="twitter:image" content="https://images.pexels.com/photos/11467524/pexels-photo-11467524.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SkyView Weather",
+    "description": "موقع طقس ذكي يوفر توقعات دقيقة لأي مكان في العالم",
+    "applicationCategory": "WeatherApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌤️</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body class="theme-auto" id="body">
+
+  <div id="preloader" class="preloader">
+    <div class="preloader-content">
+      <div class="preloader-icon">
+        <div class="cloud-animation">
+          <div class="cloud cloud-main">
+            <i class="fas fa-cloud"></i>
+          </div>
+          <div class="sun-rays">
+            <i class="fas fa-sun fa-spin"></i>
+          </div>
+          <div class="rain-drops">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      <h1 class="preloader-title">SkyView</h1>
+      <p class="preloader-subtitle">🌍 جارٍ تحديد موقعك والحصول على بيانات الطقس...</p>
+      <div class="preloader-bar">
+        <div class="preloader-progress" id="preloaderProgress"></div>
+      </div>
+      <span class="preloader-percent" id="preloaderPercent">0%</span>
+    </div>
+  </div>
+  <div id="mainContent" class="main-content hidden">
+
+    <nav class="navbar" id="navbar" role="navigation" aria-label="القائمة الرئيسية">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <i class="fas fa-cloud-sun nav-logo-icon"></i>
+          <span class="nav-logo-text">SkyView</span>
+        </div>
+        <div class="nav-controls">
+          <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع الليلي/النهاري" title="تبديل الوضع">
+            <i class="fas fa-moon" id="themeIcon"></i>
+          </button>
+          <button class="favorites-toggle" id="favoritesToggle" aria-label="المدن المفضلة" title="المدن المفضلة">
+            <i class="fas fa-heart" aria-hidden="true"></i>
+            <span>المفضلة</span>
+            <span class="favorites-count" id="favoritesCount">0</span>
+          </button>
+          <button class="about-toggle" id="aboutToggle" aria-label="من نحن" title="عن مشروع SkyView">
+            <i class="fas fa-circle-info" aria-hidden="true"></i>
+            <span>عن المشروع</span>
+          </button>
+          <button class="unit-toggle" id="unitToggle" aria-label="تبديل وحدة الحرارة" title="تغيير الوحدة">
+            <span id="unitText">°C</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="weather-bg" id="weatherBg">
+      <div class="bg-overlay" id="bgOverlay"></div>
+      <div class="bg-particles" id="bgParticles"></div>
+    </div>
+
+    <main class="hero-section" id="heroSection" role="main">
+
+      <div class="search-container" role="search">
+        <div class="search-wrapper">
+          <div class="search-input-group">
+            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+            <input
+              type="text"
+              id="citySearch"
+              class="search-input"
+              placeholder="ابحث عن مدينة أو قرية أو محافظة... (مثال: دمنهور، البحيرة)"
+              aria-label="ابحث عن مدينة"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <ul class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="اقتراحات البحث"></ul>
+          </div>
+          <div class="search-buttons">
+            <button class="btn-search" id="searchBtn" aria-label="بحث">
+              <i class="fas fa-search"></i>
+              <span>بحث</span>
+            </button>
+            <button class="btn-location" id="locationBtn" aria-label="استخدام موقعي الحالي" title="تحديد موقعي">
+              <i class="fas fa-location-crosshairs"></i>
+              <span>موقعي</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="error-message hidden" id="errorMessage" role="alert" aria-live="polite">
+        <div class="error-content">
+          <i class="fas fa-exclamation-triangle error-icon"></i>
+          <div class="error-text">
+            <h3 id="errorTitle">حدث خطأ</h3>
+            <p id="errorDesc">يرجى المحاولة مرة أخرى</p>
+          </div>
+          <button class="error-close" id="errorClose" aria-label="إغلاق رسالة الخطأ">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <section class="weather-main-card" id="weatherCard" aria-label="معلومات الطقس الحالية">
+
+        <div class="weather-card-header">
+          <div class="location-info">
+            <i class="fas fa-map-marker-alt location-pin" aria-hidden="true"></i>
+            <div class="location-text">
+              <div class="city-title-row">
+                <h1 class="city-name" id="cityName">---</h1>
+                <button class="favorite-city-btn" id="favoriteCityBtn" type="button" aria-label="إضافة المدينة للمفضلة" title="إضافة للمفضلة" disabled>
+                  <i class="far fa-heart" id="favoriteCityIcon" aria-hidden="true"></i>
+                </button>
+              </div>
+              <p class="country-name" id="countryName">ابحث عن مدينة للبدء</p>
+            </div>
+          </div>
+          <div class="current-datetime">
+            <div class="current-time" id="currentTime">--:--</div>
+            <div class="current-date" id="currentDate">---</div>
+          </div>
+        </div>
+
+        <div class="weather-card-body">
+          <div class="temp-section">
+            <div class="weather-icon-large" id="weatherIconLarge">
+              <i class="fas fa-cloud-sun weather-main-icon" id="mainWeatherIcon" aria-hidden="true"></i>
+            </div>
+            <div class="temperature-display">
+              <span class="temp-value" id="tempValue">--</span>
+              <span class="temp-unit">°C</span>
+            </div>
+            <div class="feels-like">
+              <i class="fas fa-thermometer-half" aria-hidden="true"></i>
+              الشعور كـ <span id="feelsLike">--</span>°
+            </div>
+          </div>
+
+          <div class="weather-details-section">
+            <div class="weather-description" id="weatherDesc">ابحث عن مدينة</div>
+            <div class="temp-range">
+              <span class="temp-high">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                <span id="tempHigh">--</span>°
+              </span>
+              <span class="temp-separator">|</span>
+              <span class="temp-low">
+                <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                <span id="tempLow">--</span>°
+              </span>
+            </div>
+
+            <div class="weather-stats-grid">
+              <div class="stat-card" aria-label="الرطوبة">
+                <div class="stat-icon humidity-icon"><i class="fas fa-droplet" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الرطوبة</span>
+                  <span class="stat-value" id="humidity">--%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill humidity-fill" id="humidityBar" style="width: 0%"></div></div>
+              </div>
+              <div class="stat-card" aria-label="الرياح">
+                <div class="stat-icon wind-icon"><i class="fas fa-wind" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الرياح</span>
+                  <span class="stat-value" id="windSpeed">-- كم/س</span>
+                </div>
+                <div class="wind-direction" id="windDirection">
+                  <i class="fas fa-location-arrow wind-arrow" id="windArrow" aria-hidden="true"></i>
+                  <span id="windDir">--</span>
+                </div>
+              </div>
+              <div class="stat-card" aria-label="الضغط الجوي">
+                <div class="stat-icon pressure-icon"><i class="fas fa-gauge-high" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الضغط</span>
+                  <span class="stat-value" id="pressure">-- hPa</span>
+                </div>
+                <div class="pressure-indicator" id="pressureIndicator">
+                  <span class="pressure-status" id="pressureStatus">طبيعي</span>
+                </div>
+              </div>
+              <div class="stat-card" aria-label="مدى الرؤية">
+                <div class="stat-icon visibility-icon"><i class="fas fa-eye" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الرؤية</span>
+                  <span class="stat-value" id="visibility">-- كم</span>
+                </div>
+              </div>
+              <div class="stat-card" aria-label="مؤشر الأشعة فوق البنفسجية">
+                <div class="stat-icon uv-icon"><i class="fas fa-sun" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">مؤشر UV</span>
+                  <span class="stat-value" id="uvIndex">--</span>
+                </div>
+                <div class="uv-level" id="uvLevel">--</div>
+              </div>
+              <div class="stat-card" aria-label="نسبة الغيوم">
+                <div class="stat-icon cloud-icon"><i class="fas fa-cloud" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الغيوم</span>
+                  <span class="stat-value" id="cloudCover">--%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="weather-card-footer">
+          <div class="sun-times">
+            <div class="sun-time sunrise">
+              <div class="sun-time-icon"><i class="fas fa-sun" aria-hidden="true"></i></div>
+              <div class="sun-time-info">
+                <span class="sun-label">الشروق</span>
+                <span class="sun-value" id="sunrise">--:--</span>
+              </div>
+            </div>
+            <div class="sun-progress-container">
+              <div class="sun-arc">
+                <div class="sun-dot" id="sunDot"></div>
+              </div>
+            </div>
+            <div class="sun-time sunset">
+              <div class="sun-time-icon"><i class="fas fa-moon" aria-hidden="true"></i></div>
+              <div class="sun-time-info">
+                <span class="sun-label">الغروب</span>
+                <span class="sun-value" id="sunset">--:--</span>
+              </div>
+            </div>
+          </div>
+          <div class="extra-info">
+            <div class="extra-item">
+              <i class="fas fa-cloud-rain" aria-hidden="true"></i>
+              <span>التساقط: <strong id="precipitation">-- مم</strong></span>
+            </div>
+            <div class="extra-item">
+              <i class="fas fa-smog" aria-hidden="true"></i>
+              <span>نقطة الندى: <strong id="dewPoint">--°</strong></span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <section class="hourly-section" id="hourlySection" aria-label="التوقعات الساعية">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-clock" aria-hidden="true"></i>
+            توقعات اليوم بالساعة
+          </h2>
+          <div class="scroll-controls">
+            <button class="scroll-btn scroll-right" id="hourlyScrollRight" aria-label="التالي">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="scroll-btn scroll-left" id="hourlyScrollLeft" aria-label="السابق">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+          </div>
+        </div>
+        <div class="hourly-container" id="hourlyContainer" role="list" aria-label="التوقعات بالساعة">
+          <div class="loading-cards">
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+          </div>
+        </div>
+      </section>
+      <section class="simple-weather-cta education-section" id="simpleWeatherCta" aria-labelledby="simpleWeatherCtaTitle">
+        <div class="section-header simple-weather-cta-header">
+          <div>
+            <span class="section-kicker">النسخة الرئيسية</span>
+            <h2 class="section-title" id="simpleWeatherCtaTitle"><i class="fas fa-layer-group" aria-hidden="true"></i> عايز تشوف SkyView بالكامل؟</h2>
+            <p class="simple-weather-cta-description">انتقل إلى الصفحة الرئيسية لاستكشاف تحليلات الطقس والمناخ، الرسوم البيانية، التوقعات، والمحتوى التفاعلي في التجربة الكاملة للمشروع.</p>
+          </div>
+          <a class="simple-weather-cta-button" href="index.html" aria-label="الانتقال إلى الصفحة الرئيسية لمشروع SkyView">
+            افتح الصفحة الرئيسية
+            <i class="fas fa-house" aria-hidden="true"></i>
+          </a>
+        </div>
+      </section>
+      <section class="forecast-section" id="forecastSection" aria-label="التوقعات اليومية">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-calendar-week" aria-hidden="true"></i>
+            التوقعات اليومية
+          </h2>
+        </div>
+        <div class="forecast-grid" id="forecastGrid" role="list" aria-label="توقعات الأيام القادمة">
+          <div class="loading-cards">
+            <div class="loading-skeleton tall"></div>
+            <div class="loading-skeleton tall"></div>
+            <div class="loading-skeleton tall"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-section" id="infoSection" aria-label="معلومات إضافية">
+        <div class="info-grid">
+          <div class="info-card weather-tip-card">
+            <div class="info-card-header">
+              <i class="fas fa-lightbulb" aria-hidden="true"></i>
+              <h3>نصيحة الطقس</h3>
+            </div>
+            <div class="info-card-body">
+              <div class="tip-icon" id="tipIcon">🌤️</div>
+              <p class="tip-text" id="tipText">ابحث عن مدينة لرؤية نصيحة الطقس</p>
+            </div>
+          </div>
+          <div class="info-card air-quality-card">
+            <div class="info-card-header">
+              <i class="fas fa-wind" aria-hidden="true"></i>
+              <h3>جودة الهواء</h3>
+            </div>
+            <div class="info-card-body">
+              <div class="air-quality-meter">
+                <div class="aq-value" id="aqValue">--</div>
+                <div class="aq-label" id="aqLabel">--</div>
+                <div class="aq-bar-container"><div class="aq-bar" id="aqBar"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="info-card astro-card">
+            <div class="info-card-header">
+              <i class="fas fa-moon" aria-hidden="true"></i>
+              <h3>القمر والفلكيات</h3>
+            </div>
+            <div class="info-card-body">
+              <div class="astro-info">
+                <div class="astro-item">
+                  <i class="fas fa-moon" aria-hidden="true"></i>
+                  <span>طلوع القمر: <strong id="moonrise">--</strong></span>
+                </div>
+                <div class="astro-item">
+                  <i class="fas fa-moon" style="opacity:0.5" aria-hidden="true"></i>
+                  <span>غروب القمر: <strong id="moonset">--</strong></span>
+                </div>
+                <div class="astro-item">
+                  <span class="moon-phase-icon" id="moonPhaseIcon">🌕</span>
+                  <span>مرحلة القمر: <strong id="moonPhase">--</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-cloud-sun" aria-hidden="true"></i>
+          <span>SkyView Weather</span>
+        </div>
+        <p class="footer-text">
+          بيانات الطقس مقدمة من
+          <a href="https://www.weatherapi.com" target="_blank" rel="noopener noreferrer" class="footer-link">WeatherAPI.com</a>
+        </p>
+        <p class="footer-credits">
+          <i class="fas fa-heart" style="color:#e74c3c" aria-hidden="true"></i>
+          صُنع بشغف لأجل تجربة طقس مثالية
+        </p>
+        <p class="footer-update">
+          <i class="fas fa-rotate-right" aria-hidden="true"></i>
+          آخر تحديث: <span id="lastUpdate">--</span>
+        </p>
+      </div>
+    </footer>
+
+  </div>
+  <div class="about-modal hidden" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <div class="about-backdrop" id="aboutBackdrop"></div>
+
+      <div class="about-dialog" role="document">
+        <button
+          class="about-close"
+          id="aboutClose"
+          type="button"
+          aria-label="إغلاق نافذة من نحن"
+          title="إغلاق"
+        >
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+
+        <div class="about-icon" aria-hidden="true">
+          <i class="fas fa-cloud-sun"></i>
+        </div>
+
+        <div class="about-content">
+          <span class="about-eyebrow">عن المشروع</span>
+          <h2 id="aboutTitle">SkyView Weather</h2>
+
+          <p class="about-description">
+            SkyView Weather هو Web App لعرض حالة الطقس بطريقة بسيطة وتفاعلية،
+            مع إمكانية البحث عن أي مدينة أو تحديد موقع المستخدم تلقائيًا.
+          </p>
+
+          <div class="about-section">
+            <h3><i class="fas fa-code" aria-hidden="true"></i> التقنيات المستخدمة</h3>
+            <div class="about-tags">
+              <span>HTML5</span>
+              <span>CSS3</span>
+              <span>Vanilla JavaScript</span>
+              <span>WeatherAPI</span>
+              <span>Geolocation API</span>
+              <span>Vercel Serverless Functions</span>
+              <span>OpenCage Geocoding</span>
+            </div>
+          </div>
+
+          <div class="about-section">
+            <h3><i class="fas fa-location-dot" aria-hidden="true"></i> تحديد الموقع</h3>
+            <p>
+              التطبيق بيستخدم Geolocation API للحصول على الـLatitude والـLongitude
+              من المتصفح، وبعدها بيستخدم الإحداثيات دي علشان يجيب حالة الطقس للموقع الحالي.
+              وكمان تقدر تبحث عن المدينة يدويًا من الـSearch Bar.
+            </p>
+          </div>
+
+          <div class="about-section about-highlight">
+            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+            <p>
+              الـAPI Key مش موجود في الـFrontend، وبيتم التعامل معاه من خلال
+              Vercel Serverless Functions وEnvironment Variables.
+            </p>
+          </div>
+
+          <div class="about-footer">
+            <span><i class="fas fa-user" aria-hidden="true"></i> Developed by Youssef Sameh</span>
+            <span><i class="fas fa-cloud-sun" aria-hidden="true"></i> SkyView Weather</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="favorites-panel hidden" id="favoritesPanel" aria-label="المدن المفضلة">
+      <div class="favorites-panel-header">
+        <div>
+          <h2><i class="fas fa-heart"></i> المدن المفضلة</h2>
+          <p>احفظ المدن التي تتابعها للوصول إليها بسرعة.</p>
+        </div>
+        <button class="favorites-close" id="favoritesClose" aria-label="إغلاق"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="favorites-list" id="favoritesList"></div>
+      <div class="favorites-empty" id="favoritesEmpty">
+        <i class="far fa-heart"></i>
+        <p>لسه مفيش مدن في المفضلة.</p>
+        <span>ابحث عن مدينة واضغط القلب لحفظها.</span>
+      </div>
+    </div>
+  <button
+    class="scroll-top-btn"
+    id="scrollTopBtn"
+    aria-label="العودة لرأس الصفحة"
+    title="العودة للأعلى"
+    hidden
+  >
+    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    <svg class="scroll-progress" viewBox="0 0 36 36" aria-hidden="true">
+      <circle class="scroll-progress-bg" cx="18" cy="18" r="16"/>
+      <circle class="scroll-progress-fill" id="scrollProgressFill" cx="18" cy="18" r="16"/>
+    </svg>
+  </button>
+
+  <script src="js/weather.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

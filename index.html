@@ -1,0 +1,937 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>SkyView Climate & Weather | الطقس والبيانات المناخية</title>
+  <meta name="description" content="SkyView Climate & Weather منصة رقمية لتحليل الطقس والبيانات المناخية باستخدام التكنولوجيا، تجمع الطقس الحالي والتوقعات والتحليل التاريخي والمحتوى التعليمي." />
+  <meta name="keywords" content="طقس, مناخ, تغيرات مناخية, بيانات مناخية, تحليل الطقس, Climate Center, Weather, Climate, ERA5, temperature, rainfall" />
+  <meta name="author" content="Youssef Sameh" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#3f7f74" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SkyView Climate & Weather" />
+  <meta property="og:description" content="منصة رقمية لتحليل الطقس والبيانات المناخية باستخدام التكنولوجيا." />
+  <meta property="og:image" content="https://sky-view-weather-app-weather-histor.vercel.app/og-image.jpeg" />
+  <meta property="og:site_name" content="SkyView Climate & Weather" />
+  <meta property="og:locale" content="ar_AR" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SkyView Climate & Weather" />
+  <meta name="twitter:description" content="افهم الطقس، حلّل البيانات التاريخية، واكتشف دور التكنولوجيا في فهم المناخ." />
+  <meta name="twitter:image" content="https://sky-view-weather-app-weather-histor.vercel.app/og-image.jpeg" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SkyView Climate & Weather",
+    "description": "منصة رقمية لتحليل الطقس والبيانات المناخية باستخدام التكنولوجيا",
+    "applicationCategory": "WeatherApplication",
+    "operatingSystem": "Any"
+  }
+  </script>
+
+  <link href="/favicon.svg" rel="icon" type="image/svg+xml"  />
+  <link href="/favicon.ico" rel="icon"  />
+  <link href="/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link href="/site.webmanifest" rel="manifest"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body class="theme-auto" id="body">
+
+  <div id="preloader" class="preloader">
+    <div class="preloader-content">
+      <div class="preloader-icon">
+        <div class="cloud-animation">
+          <div class="cloud cloud-main">
+            <i class="fas fa-cloud"></i>
+          </div>
+          <div class="sun-rays">
+            <i class="fas fa-sun fa-spin"></i>
+          </div>
+          <div class="rain-drops">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      <h1 class="preloader-title">SkyView</h1>
+      <p class="preloader-subtitle">🌍 جارٍ تحديد موقعك والحصول على بيانات الطقس...</p>
+      <div class="preloader-bar">
+        <div class="preloader-progress" id="preloaderProgress"></div>
+      </div>
+      <span class="preloader-percent" id="preloaderPercent">0%</span>
+    </div>
+  </div>
+  <div id="mainContent" class="main-content hidden">
+
+    <nav class="navbar" id="navbar" role="navigation" aria-label="القائمة الرئيسية">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <i class="fas fa-earth-americas nav-logo-icon"></i>
+          <span class="nav-logo-text">SkyView <small>Climate & Weather</small></span>
+        </div>
+        <div class="nav-controls">
+          <a class="nav-climate-link" href="#climateCenter" aria-label="فتح المركز المناخي" title="المركز المناخي">
+            <i class="fas fa-chart-line" aria-hidden="true"></i>
+            <span>Climate Center</span>
+          </a>
+          <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع الليلي/النهاري" title="تبديل الوضع">
+            <i class="fas fa-moon" id="themeIcon"></i>
+          </button>
+          <button class="favorites-toggle" id="favoritesToggle" aria-label="المدن المفضلة" title="المدن المفضلة">
+            <i class="fas fa-heart" aria-hidden="true"></i>
+            <span>المفضلة</span>
+            <span class="favorites-count" id="favoritesCount">0</span>
+          </button>
+          <button class="about-toggle" id="aboutToggle" aria-label="من نحن" title="عن مشروع SkyView">
+            <i class="fas fa-circle-info" aria-hidden="true"></i>
+            <span>عن المشروع</span>
+          </button>
+          <button class="unit-toggle" id="unitToggle" aria-label="تبديل وحدة الحرارة" title="تغيير الوحدة">
+            <span id="unitText">°C</span>
+          </button>
+        </div>
+      </div>
+    </nav><nav class="section-nav" id="sectionNav" aria-label="التنقل بين أقسام الصفحة">
+  <div class="section-nav-inner">
+    <span class="section-nav-label">الأقسام</span>
+    <div class="section-nav-links" id="sectionNavLinks">
+      <a class="section-nav-link" href="#homeIntro" data-section-target="homeIntro">الرئيسية</a>
+      <a class="section-nav-link" href="#weatherCard" data-section-target="weatherCard">الطقس الآن</a>
+      <a class="section-nav-link" href="#hourlySection" data-section-target="hourlySection">بالساعة</a>
+      <a class="section-nav-link" href="#weatherChartsSection" data-section-target="weatherChartsSection">سجل الطقس</a>
+      <a class="section-nav-link" href="#climateCenter" data-section-target="climateCenter">المركز المناخي</a>
+      <a class="section-nav-link" href="#weatherClimate" data-section-target="weatherClimate">الطقس والمناخ</a>
+      <a class="section-nav-link" href="#climateImpacts" data-section-target="climateImpacts">التأثيرات</a>
+      <a class="section-nav-link" href="#technology" data-section-target="technology">التكنولوجيا</a>
+      <a class="section-nav-link" href="#climateActions" data-section-target="climateActions">ماذا نفعل؟</a>
+      <a class="section-nav-link" href="#sources" data-section-target="sources">البيانات والمصادر</a>
+      <a class="section-nav-link" href="#aboutProject" data-section-target="aboutProject">عن المشروع</a>
+      <a class="section-nav-link" href="#forecastSection" data-section-target="forecastSection">التوقعات اليومية</a>
+      <a class="section-nav-link" href="#infoSection" data-section-target="infoSection">معلومات إضافية</a>
+    </div>
+  </div>
+</nav>
+    <div class="weather-bg" id="weatherBg">
+      <div class="bg-overlay" id="bgOverlay"></div>
+      <div class="bg-particles" id="bgParticles"></div>
+    </div>
+
+    <main class="hero-section" id="heroSection" role="main">
+
+      <div class="search-container" role="search">
+        <div class="search-wrapper">
+          <div class="search-input-group">
+            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+            <input
+              type="text"
+              id="citySearch"
+              class="search-input"
+              placeholder="ابحث عن مدينة أو قرية أو محافظة... (مثال: دمنهور، البحيرة)"
+              aria-label="ابحث عن مدينة"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <ul class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="اقتراحات البحث"></ul>
+          </div>
+          <div class="search-buttons">
+            <button class="btn-search" id="searchBtn" aria-label="بحث">
+              <i class="fas fa-search"></i>
+              <span>بحث</span>
+            </button>
+            <button class="btn-location" id="locationBtn" aria-label="استخدام موقعي الحالي" title="تحديد موقعي">
+              <i class="fas fa-location-crosshairs"></i>
+              <span>موقعي</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="error-message hidden" id="errorMessage" role="alert" aria-live="polite">
+        <div class="error-content">
+          <i class="fas fa-exclamation-triangle error-icon"></i>
+          <div class="error-text">
+            <h3 id="errorTitle">حدث خطأ</h3>
+            <p id="errorDesc">يرجى المحاولة مرة أخرى</p>
+          </div>
+          <button class="error-close" id="errorClose" aria-label="إغلاق رسالة الخطأ">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <section class="platform-intro" id="homeIntro" aria-labelledby="platformTitle">
+        <div class="platform-intro-copy">
+          <span class="platform-eyebrow"><i class="fas fa-leaf" aria-hidden="true"></i> Climate Technology Platform</span>
+          <h1 id="platformTitle">افهم الطقس. حلّل المناخ. استخدم التكنولوجيا.</h1>
+          <p>SkyView Climate & Weather يحوّل البيانات الجوية والتاريخية إلى معلومات مرئية تساعدك على فهم حالة الطقس، دراسة الأنماط عبر السنوات، والتعرف على العلاقة بين البيانات والمناخ والتكنولوجيا.</p>
+          <div class="platform-actions">
+            <a class="primary-action" href="#climateCenter"><i class="fas fa-chart-area"></i> ابدأ التحليل</a>
+            <a class="secondary-action" href="#weatherClimate"><i class="fas fa-graduation-cap"></i> تعلّم الفرق</a>
+          </div>
+        </div>
+        <div class="data-flow-card" aria-label="رحلة البيانات">
+          <span>من البيانات إلى الفهم</span>
+          <div class="data-flow"><b>DATA</b><i class="fas fa-arrow-left"></i><b>ANALYSIS</b><i class="fas fa-arrow-left"></i><b>VISUALIZATION</b><i class="fas fa-arrow-left"></i><b>EDUCATION</b></div>
+        </div>
+      </section>
+
+      <section class="weather-main-card" id="weatherCard" aria-label="معلومات الطقس الحالية">
+
+        <div class="weather-card-header">
+          <div class="location-info">
+            <i class="fas fa-map-marker-alt location-pin" aria-hidden="true"></i>
+            <div class="location-text">
+              <div class="city-title-row">
+                <h1 class="city-name" id="cityName">---</h1>
+                <button class="favorite-city-btn" id="favoriteCityBtn" type="button" aria-label="إضافة المدينة للمفضلة" title="إضافة للمفضلة" disabled>
+                  <i class="far fa-heart" id="favoriteCityIcon" aria-hidden="true"></i>
+                </button>
+              </div>
+              <p class="country-name" id="countryName">ابحث عن مدينة للبدء</p>
+            </div>
+          </div>
+          <div class="current-datetime">
+            <div class="current-time" id="currentTime">--:--</div>
+            <div class="current-date" id="currentDate">---</div>
+          </div>
+        </div>
+
+        <div class="weather-card-body">
+          <div class="temp-section">
+            <div class="weather-icon-large" id="weatherIconLarge">
+              <i class="fas fa-cloud-sun weather-main-icon" id="mainWeatherIcon" aria-hidden="true"></i>
+            </div>
+            <div class="temperature-display">
+              <span class="temp-value" id="tempValue">--</span>
+              <span class="temp-unit">°C</span>
+            </div>
+            <div class="feels-like">
+              <i class="fas fa-thermometer-half" aria-hidden="true"></i>
+              الشعور كـ <span id="feelsLike">--</span>°
+            </div>
+          </div>
+
+          <div class="weather-details-section">
+            <div class="weather-description" id="weatherDesc">ابحث عن مدينة</div>
+            <div class="temp-range">
+              <span class="temp-high">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                <span id="tempHigh">--</span>°
+              </span>
+              <span class="temp-separator">|</span>
+              <span class="temp-low">
+                <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                <span id="tempLow">--</span>°
+              </span>
+            </div>
+
+            <div class="weather-stats-grid">
+              <div class="stat-card" aria-label="الرطوبة">
+                <div class="stat-icon humidity-icon"><i class="fas fa-droplet" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الرطوبة</span>
+                  <span class="stat-value" id="humidity">--%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill humidity-fill" id="humidityBar" style="width: 0%"></div></div>
+              </div>
+              <div class="stat-card" aria-label="الرياح">
+                <div class="stat-icon wind-icon"><i class="fas fa-wind" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الرياح</span>
+                  <span class="stat-value" id="windSpeed">-- كم/س</span>
+                </div>
+                <div class="wind-direction" id="windDirection">
+                  <i class="fas fa-location-arrow wind-arrow" id="windArrow" aria-hidden="true"></i>
+                  <span id="windDir">--</span>
+                </div>
+              </div>
+              <div class="stat-card" aria-label="الضغط الجوي">
+                <div class="stat-icon pressure-icon"><i class="fas fa-gauge-high" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الضغط</span>
+                  <span class="stat-value" id="pressure">-- hPa</span>
+                </div>
+                <div class="pressure-indicator" id="pressureIndicator">
+                  <span class="pressure-status" id="pressureStatus">طبيعي</span>
+                </div>
+              </div>
+              <div class="stat-card" aria-label="مدى الرؤية">
+                <div class="stat-icon visibility-icon"><i class="fas fa-eye" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الرؤية</span>
+                  <span class="stat-value" id="visibility">-- كم</span>
+                </div>
+              </div>
+              <div class="stat-card" aria-label="مؤشر الأشعة فوق البنفسجية">
+                <div class="stat-icon uv-icon"><i class="fas fa-sun" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">مؤشر UV</span>
+                  <span class="stat-value" id="uvIndex">--</span>
+                </div>
+                <div class="uv-level" id="uvLevel">--</div>
+              </div>
+              <div class="stat-card" aria-label="نسبة الغيوم">
+                <div class="stat-icon cloud-icon"><i class="fas fa-cloud" aria-hidden="true"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">الغيوم</span>
+                  <span class="stat-value" id="cloudCover">--%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="weather-card-footer">
+          <div class="sun-times">
+            <div class="sun-time sunrise">
+              <div class="sun-time-icon"><i class="fas fa-sun" aria-hidden="true"></i></div>
+              <div class="sun-time-info">
+                <span class="sun-label">الشروق</span>
+                <span class="sun-value" id="sunrise">--:--</span>
+              </div>
+            </div>
+            <div class="sun-progress-container">
+              <div class="sun-arc">
+                <div class="sun-dot" id="sunDot"></div>
+              </div>
+            </div>
+            <div class="sun-time sunset">
+              <div class="sun-time-icon"><i class="fas fa-moon" aria-hidden="true"></i></div>
+              <div class="sun-time-info">
+                <span class="sun-label">الغروب</span>
+                <span class="sun-value" id="sunset">--:--</span>
+              </div>
+            </div>
+          </div>
+          <div class="extra-info">
+            <div class="extra-item">
+              <i class="fas fa-cloud-rain" aria-hidden="true"></i>
+              <span>التساقط: <strong id="precipitation">-- مم</strong></span>
+            </div>
+            <div class="extra-item">
+              <i class="fas fa-smog" aria-hidden="true"></i>
+              <span>نقطة الندى: <strong id="dewPoint">--°</strong></span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <section class="hourly-section" id="hourlySection" aria-label="التوقعات الساعية">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-clock" aria-hidden="true"></i>
+            توقعات اليوم بالساعة
+          </h2>
+          <div class="scroll-controls">
+            <button class="scroll-btn scroll-right" id="hourlyScrollRight" aria-label="التالي">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="scroll-btn scroll-left" id="hourlyScrollLeft" aria-label="السابق">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+          </div>
+        </div>
+        <div class="hourly-container" id="hourlyContainer" role="list" aria-label="التوقعات بالساعة">
+          <div class="loading-cards">
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+            <div class="loading-skeleton"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="weather-charts-section" id="weatherChartsSection" aria-label="سجل ورسوم الطقس">
+        <div class="section-header weather-charts-header">
+          <div>
+            <h2 class="section-title">
+              <i class="fas fa-chart-line" aria-hidden="true"></i>
+              سجل الطقس والرسوم البيانية
+            </h2>
+            <p class="section-subtitle">تغيرات الطقس خلال ساعات اليوم بناءً على البيانات الساعية.</p>
+          </div>
+          <div class="chart-controls" role="group" aria-label="نوع الرسم البياني">
+            <button class="chart-tab active" type="button" data-chart="temperature">
+              <i class="fas fa-temperature-half" aria-hidden="true"></i>
+              الحرارة
+            </button>
+            <button class="chart-tab" type="button" data-chart="humidity">
+              <i class="fas fa-droplet" aria-hidden="true"></i>
+              الرطوبة
+            </button>
+            <button class="chart-tab" type="button" data-chart="wind">
+              <i class="fas fa-wind" aria-hidden="true"></i>
+              الرياح
+            </button>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <article class="chart-card chart-card-featured">
+            <div class="chart-card-header">
+              <div>
+                <span class="chart-kicker">خلال اليوم</span>
+                <h3 id="activeChartTitle">تغير الحرارة</h3>
+              </div>
+              <span class="chart-unit" id="activeChartUnit">°C</span>
+            </div>
+            <div class="chart-canvas-wrap">
+              <canvas id="weatherChart" aria-label="رسم بياني لتغير الطقس خلال اليوم"></canvas>
+            </div>
+          </article>
+
+          <aside class="chart-summary-card">
+            <div class="chart-summary-icon" id="chartSummaryIcon">🌡️</div>
+            <div>
+              <span class="chart-kicker">ملخص اليوم</span>
+              <h3 id="chartSummaryTitle">الحرارة</h3>
+            </div>
+            <div class="chart-summary-value" id="chartSummaryValue">--</div>
+            <p id="chartSummaryText">سيظهر ملخص البيانات بعد تحميل الطقس.</p>
+            <div class="chart-summary-stats">
+              <div>
+                <span>الأعلى</span>
+                <strong id="chartMax">--</strong>
+              </div>
+              <div>
+                <span>الأدنى</span>
+                <strong id="chartMin">--</strong>
+              </div>
+              <div>
+                <span>المتوسط</span>
+                <strong id="chartAvg">--</strong>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+
+      <section class="climate-center-section" id="climateCenter" aria-label="المركز المناخي">
+        <div class="climate-hero">
+          <div class="climate-hero-copy">
+            <span class="climate-eyebrow"><i class="fas fa-earth-americas" aria-hidden="true"></i> Climate Center</span>
+            <h2>المركز المناخي</h2>
+            <p>
+              بدل لقطة واحدة لطقس اليوم، هنا بنقرأ الصورة على مدى سنوات:
+              المتوسطات، السجلات، المطر، أيام الحرارة الشديدة، واتجاه الحرارة مع الزمن.
+            </p>
+            <div class="climate-meta">
+              <span><i class="fas fa-location-dot" aria-hidden="true"></i><strong id="climateLocation">--</strong></span>
+              <span><i class="fas fa-calendar-days" aria-hidden="true"></i><strong id="climatePeriod">--</strong></span>
+              <span><i class="fas fa-database" aria-hidden="true"></i><strong id="climateAvailableDays">--</strong></span>
+            </div>
+          </div>
+
+          <div class="climate-range-wrap" role="group" aria-label="الفترة التاريخية">
+            <span>نطاق التحليل</span>
+            <div class="climate-range-controls">
+              <button class="climate-range-btn" data-years="5" type="button">5 سنوات</button>
+              <button class="climate-range-btn active" data-years="10" type="button">10 سنوات</button>
+              <button class="climate-range-btn" data-years="20" type="button">20 سنة</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="climate-state climate-loading" id="climateLoading">
+          <div class="climate-spinner" aria-hidden="true"><i class="fas fa-satellite-dish"></i></div>
+          <strong>جارٍ بناء الصورة المناخية...</strong>
+          <span>بنحلل السجل التاريخي بدل ما نكتفي بدرجة حرارة اليوم.</span>
+        </div>
+
+        <div class="climate-state climate-error hidden" id="climateError">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div>
+            <strong>تعذر تحميل المركز المناخي</strong>
+            <span id="climateErrorText">حاول مرة أخرى بعد تحديث موقع الطقس.</span>
+          </div>
+        </div>
+
+        <div class="climate-content hidden" id="climateContent">
+          <div class="climate-kpi-grid">
+            <article class="climate-kpi climate-kpi-main">
+              <div class="climate-kpi-icon"><i class="fas fa-temperature-half" aria-hidden="true"></i></div>
+              <div>
+                <span>متوسط الحرارة التاريخي</span>
+                <strong id="climateAvgTemp">--</strong>
+                <small>متوسط الفترة المختارة</small>
+              </div>
+            </article>
+
+            <article class="climate-kpi">
+              <div class="climate-kpi-icon"><i class="fas fa-fire" aria-hidden="true"></i></div>
+              <div>
+                <span>أيام الحرارة الشديدة</span>
+                <strong id="climateHeatDays">--</strong>
+                <small id="climateHeatDaysMeta">--</small>
+              </div>
+            </article>
+
+            <article class="climate-kpi">
+              <div class="climate-kpi-icon"><i class="fas fa-cloud-rain" aria-hidden="true"></i></div>
+              <div>
+                <span>متوسط الأمطار السنوي</span>
+                <strong id="climateTotalRain">--</strong>
+                <small id="climateTotalRainMeta">--</small>
+              </div>
+            </article>
+
+            <article class="climate-kpi">
+              <div class="climate-kpi-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
+              <div>
+                <span id="climateTrendLabel">اتجاه الحرارة</span>
+                <strong id="climateTrendValue">--</strong>
+                <small id="climateTrendMeta">--</small>
+              </div>
+            </article>
+
+            <article class="climate-kpi climate-kpi-record">
+              <div class="climate-record-split">
+                <div>
+                  <span>أعلى حرارة</span>
+                  <strong id="climateRecordHigh">--</strong>
+                  <small id="climateRecordHighDate">--</small>
+                </div>
+                <div>
+                  <span>أدنى حرارة</span>
+                  <strong id="climateRecordLow">--</strong>
+                  <small id="climateRecordLowDate">--</small>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="climate-chart-section">
+            <div class="section-header climate-chart-header">
+              <div>
+                <h3 class="section-title"><i class="fas fa-chart-area" aria-hidden="true"></i> قراءة السجل</h3>
+                <p class="section-subtitle">مقارنة السنوات كاملة، ثم رؤية البصمة الشهرية للمناخ.</p>
+              </div>
+              <div class="climate-chart-tabs" role="group" aria-label="نوع الرسم المناخي">
+                <button class="climate-chart-tab active" data-climate-chart="temperature" type="button">الحرارة السنوية</button>
+                <button class="climate-chart-tab" data-climate-chart="rainfall" type="button">الأمطار السنوية</button>
+                <button class="climate-chart-tab" data-climate-chart="monthly" type="button">المتوسط الشهري</button>
+              </div>
+            </div>
+
+            <article class="climate-chart-card">
+              <div class="climate-chart-panel active" data-climate-panel="temperature">
+                <div class="climate-chart-head">
+                  <div>
+                    <span class="chart-kicker">Year over year</span>
+                    <h4>كيف تحرك متوسط الحرارة من سنة إلى سنة؟</h4>
+                  </div>
+                  <span class="chart-tools"><span class="climate-chart-unit">°C</span><button class="chart-explain-btn" data-explain="temperature" type="button">🔎 ماذا يعني؟</button></span>
+                </div>
+                <div class="climate-canvas-wrap"><canvas id="climateTemperatureChart" aria-label="مخطط متوسط الحرارة السنوي"></canvas></div>
+              </div>
+
+              <div class="climate-chart-panel" data-climate-panel="rainfall">
+                <div class="climate-chart-head">
+                  <div>
+                    <span class="chart-kicker">Annual precipitation</span>
+                    <h4>كمية المطر السنوية ومقارنة السنوات</h4>
+                  </div>
+                  <span class="chart-tools"><span class="climate-chart-unit">مم</span><button class="chart-explain-btn" data-explain="rainfall" type="button">🔎 ماذا يعني؟</button></span>
+                </div>
+                <div class="climate-canvas-wrap"><canvas id="climateRainfallChart" aria-label="مخطط الأمطار السنوية"></canvas></div>
+              </div>
+
+              <div class="climate-chart-panel" data-climate-panel="monthly">
+                <div class="climate-chart-head">
+                  <div>
+                    <span class="chart-kicker">Historical baseline</span>
+                    <h4>شكل السنة المناخية على مدار 12 شهرًا</h4>
+                  </div>
+                  <span class="chart-tools"><span class="climate-chart-unit">°C</span><button class="chart-explain-btn" data-explain="monthly" type="button">🔎 ماذا يعني؟</button></span>
+                </div>
+                <div class="climate-canvas-wrap"><canvas id="climateMonthlyChart" aria-label="مخطط المتوسط الحراري الشهري"></canvas></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="climate-insights-grid">
+            <article class="climate-insight-card">
+              <div class="climate-insight-icon"><i class="fas fa-calendar-check" aria-hidden="true"></i></div>
+              <div><span>أكثر سنة شهدت حرارة شديدة</span><strong id="climateHottestYear">--</strong><small id="climateHottestDays">--</small></div>
+            </article>
+            <article class="climate-insight-card">
+              <div class="climate-insight-icon"><i class="fas fa-cloud-showers-heavy" aria-hidden="true"></i></div>
+              <div><span>أكثر سنة مطرًا</span><strong id="climateWettestYear">--</strong><small id="climateWettestRain">--</small></div>
+            </article>
+            <article class="climate-insight-card">
+              <div class="climate-insight-icon"><i class="fas fa-sun" aria-hidden="true"></i></div>
+              <div><span>أقل سنة مطرًا</span><strong id="climateDriestYear">--</strong><small id="climateDriestRain">--</small></div>
+            </article>
+            <article class="climate-insight-card climate-insight-note">
+              <div class="climate-insight-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></div>
+              <div><span>ملاحظة المنهج</span><strong>السنوات الكاملة فقط</strong><small id="climateDataNote">--</small></div>
+            </article>
+          </div>
+
+          <section class="climate-compare" aria-labelledby="compareTitle">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title" id="compareTitle"><i class="fas fa-code-compare" aria-hidden="true"></i> مقارنة السنوات</h3>
+                <p class="section-subtitle">اختر سنتين أو أكثر من البيانات المتاحة لمقارنة متوسط الحرارة والأمطار وأيام الحرارة الشديدة.</p>
+              </div>
+              <span class="compare-hint" id="compareHint">اختر السنوات من البطاقات</span>
+            </div>
+            <div class="compare-years" id="compareYears"></div>
+            <div class="compare-table-wrap">
+              <table class="compare-table">
+                <thead><tr><th>المؤشر</th><th id="compareYearA">—</th><th id="compareYearB">—</th><th id="compareYearC">—</th></tr></thead>
+                <tbody>
+                  <tr><th>متوسط الحرارة</th><td id="compareTempA">—</td><td id="compareTempB">—</td><td id="compareTempC">—</td></tr>
+                  <tr><th>الأمطار</th><td id="compareRainA">—</td><td id="compareRainB">—</td><td id="compareRainC">—</td></tr>
+                  <tr><th>أيام الحرارة الشديدة</th><td id="compareHeatA">—</td><td id="compareHeatB">—</td><td id="compareHeatC">—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <div class="climate-method-note">
+            <div><i class="fas fa-flask" aria-hidden="true"></i><strong>كيف نقرأ النتائج؟</strong></div>
+            <p>الرسوم تصف ما يظهر في البيانات التاريخية المتاحة. لا تُستخدم هذه المقارنات وحدها لإثبات سبب التغير أو للتنبؤ بالمستقبل.</p>
+          </div>
+
+          <div class="climate-air-section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title"><i class="fas fa-wind" aria-hidden="true"></i> مؤشرات جودة الهواء</h3>
+                <p class="section-subtitle" id="climateAirSource">--</p>
+              </div>
+            </div>
+            <div class="climate-air-grid">
+              <article class="climate-air-card climate-air-primary">
+                <span>AQI</span>
+                <strong id="climateAQI">--</strong>
+                <small id="climateAQILabel">--</small>
+              </article>
+              <article class="climate-air-card">
+                <span>PM2.5</span>
+                <strong id="climatePM25">--</strong>
+                <small id="climatePM25Suffix">µg/m³</small>
+              </article>
+              <article class="climate-air-card">
+                <span>PM10</span>
+                <strong id="climatePM10">--</strong>
+                <small id="climatePM10Suffix">µg/m³</small>
+              </article>
+              <article class="climate-air-card">
+                <span>NO₂</span>
+                <strong id="climateNO2">--</strong>
+                <small id="climateNO2Suffix">µg/m³</small>
+              </article>
+              <article class="climate-air-card">
+                <span>O₃</span>
+                <strong id="climateO3">--</strong>
+                <small id="climateO3Suffix">µg/m³</small>
+              </article>
+            </div>
+          </div>
+
+          <div class="climate-footer-note">
+            <i class="fas fa-circle-info" aria-hidden="true"></i>
+            <span>المركز المناخي يعرض اتجاهات تاريخية، وليس توقعًا للمستقبل. بيانات الحرارة والأمطار هنا من إعادة تحليل ERA5، بينما مؤشرات الهواء لقطة حالية من WeatherAPI.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="education-section" id="weatherClimate" aria-labelledby="weatherClimateTitle">
+        <div class="section-header">
+          <div><span class="section-kicker">تعلم من البيانات</span><h2 class="section-title" id="weatherClimateTitle"><i class="fas fa-cloud-sun" aria-hidden="true"></i> الطقس ≠ المناخ</h2></div>
+        </div>
+        <div class="weather-climate-toggle" role="tablist" aria-label="الفرق بين الطقس والمناخ">
+          <button class="education-tab active" data-education="weather" type="button">🌤️ الطقس</button>
+          <button class="education-tab" data-education="climate" type="button">🌍 المناخ</button>
+        </div>
+        <div class="education-panels">
+          <article class="education-panel active" data-education-panel="weather"><span class="education-icon">🌤️</span><h3>ما يحدث خلال وقت قصير</h3><p>الطقس يصف حالة الغلاف الجوي خلال ساعات أو أيام، مثل درجة الحرارة الحالية، الرياح، الرطوبة واحتمال هطول الأمطار.</p><div class="example-strip"><b>34°C</b><b>🌧️ احتمال أمطار</b><b>💨 رياح</b></div></article>
+          <article class="education-panel" data-education-panel="climate"><span class="education-icon">🌍</span><h3>أنماط تُدرس عبر فترات طويلة</h3><p>المناخ يهتم بأنماط الظروف الجوية واختلافاتها عبر فترات طويلة. لذلك نحتاج إلى سجلات متعددة السنوات بدل يوم واحد.</p><div class="example-strip climate-years-strip"><b>2020</b><b>2021</b><b>2022</b><b>2023</b><b>2024</b></div></article>
+        </div>
+      </section>
+
+      <section class="education-section" id="climateImpacts" aria-labelledby="impactTitle">
+        <div class="section-header"><div><span class="section-kicker">لماذا يهمنا؟</span><h2 class="section-title" id="impactTitle"><i class="fas fa-earth-americas"></i> التأثيرات المناخية</h2><p class="section-subtitle">مجالات يمكن أن تواجه تحديات مرتبطة بتغير الحرارة وأنماط الهطول والظواهر الشديدة.</p></div></div>
+        <div class="education-card-grid">
+          <article class="topic-card"><span>🌾</span><h3>الزراعة</h3><p>تغير درجات الحرارة وأنماط الأمطار قد يمثل تحديات لإدارة المحاصيل والمياه.</p></article>
+          <article class="topic-card"><span>💧</span><h3>المياه</h3><p>مراقبة الحرارة والهطول تساعد على فهم التغيرات ودعم إدارة الموارد المائية.</p></article>
+          <article class="topic-card"><span>🏙️</span><h3>المدن</h3><p>البيانات المناخية تساعد التخطيط الحضري والتكيف مع الحرارة والظواهر الجوية الشديدة.</p></article>
+          <article class="topic-card"><span>🌊</span><h3>المناطق الساحلية</h3><p>المناطق الساحلية تحتاج إلى بيانات ومراقبة مستمرة لدعم التخطيط والبنية التحتية.</p></article>
+        </div>
+      </section>
+
+      <section class="education-section technology-section" id="technology" aria-labelledby="technologyTitle">
+        <div class="section-header"><div><span class="section-kicker">Climate + Technology</span><h2 class="section-title" id="technologyTitle"><i class="fas fa-microchip"></i> كيف تستخدم التكنولوجيا لفهم المناخ؟</h2></div></div>
+        <div class="tech-flow" id="techFlow">
+          <button data-tech="data"><span>🌍</span><b>بيانات بيئية</b><small>معلومات جوية وتاريخية</small></button><i class="fas fa-arrow-left"></i>
+          <button data-tech="sources"><span>🛰️</span><b>مصادر البيانات</b><small>واجهات ومصادر علمية</small></button><i class="fas fa-arrow-left"></i>
+          <button data-tech="processing"><span>💻</span><b>معالجة</b><small>تنظيف وتجميع البيانات</small></button><i class="fas fa-arrow-left"></i>
+          <button data-tech="analysis"><span>📊</span><b>تحليل</b><small>مؤشرات ومقارنات</small></button><i class="fas fa-arrow-left"></i>
+          <button data-tech="visualization"><span>📈</span><b>تصوير</b><small>رسوم وواجهات</small></button>
+        </div>
+        <div class="tech-explanation" id="techExplanation">اختر مرحلة لعرض شرحها.</div>
+      </section>
+
+      <section class="education-section actions-section" id="climateActions" aria-labelledby="actionsTitle">
+        <div class="section-header"><div><span class="section-kicker">وعي عملي</span><h2 class="section-title" id="actionsTitle"><i class="fas fa-lightbulb"></i> ماذا يمكننا أن نفعل؟</h2></div></div>
+        <div class="action-grid">
+          <div class="action-step"><b>01</b><h3>ترشيد المياه</h3><p>استخدم المياه بوعي وتابع ظروف الحرارة والهطول.</p></div>
+          <div class="action-step"><b>02</b><h3>تقليل هدر الطاقة</h3><p>اجعل كفاءة استهلاك الطاقة جزءًا من السلوك اليومي.</p></div>
+          <div class="action-step"><b>03</b><h3>تابع التحذيرات</h3><p>استخدم التنبيهات الجوية الرسمية عند وجود ظروف خطرة.</p></div>
+          <div class="action-step"><b>04</b><h3>استخدم البيانات</h3><p>قارن المصادر وافهم حدود البيانات قبل اتخاذ القرارات.</p></div>
+        </div>
+      </section>
+
+      <section class="sources-section" id="sources" aria-labelledby="sourcesTitle">
+        <div class="section-header"><div><span class="section-kicker">شفافية البيانات</span><h2 class="section-title" id="sourcesTitle"><i class="fas fa-database"></i> البيانات والمنهجية والمصادر</h2></div></div>
+        <div class="source-grid">
+          <article class="source-card"><span class="source-icon">🌡️</span><h3>الحرارة والأمطار</h3><p><b>ERA5 reanalysis</b> عبر Open-Meteo. تُحلل البيانات اليومية المتاحة لحساب المتوسطات والمقارنات والاتجاهات.</p><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo ↗</a></article>
+          <article class="source-card"><span class="source-icon">🌫️</span><h3>جودة الهواء والطقس</h3><p><b>WeatherAPI</b> للبيانات الحالية والتوقعات ومؤشرات جودة الهواء عند توفرها.</p><a href="https://www.weatherapi.com/" target="_blank" rel="noopener noreferrer">WeatherAPI ↗</a></article>
+          <article class="source-card"><span class="source-icon">📍</span><h3>البحث الجغرافي</h3><p><b>OpenCage</b> لتحويل أسماء الأماكن إلى إحداثيات تساعد على جلب البيانات.</p><a href="https://opencagedata.com/" target="_blank" rel="noopener noreferrer">OpenCage ↗</a></article>
+          <article class="source-card"><span class="source-icon">▲</span><h3>النشر والاستضافة</h3><p>المشروع يستخدم وظائف Vercel serverless لحماية مفاتيح الـAPI وتنفيذ الطلبات الوسيطة.</p><a href="https://vercel.com/" target="_blank" rel="noopener noreferrer">Vercel ↗</a></article>
+        </div>
+        <div class="methodology-card"><h3><i class="fas fa-flask"></i> طريقة التحليل</h3><p>يستقبل النظام بيانات تاريخية يومية، ثم يجمعها حسب السنة والشهر لحساب متوسط الحرارة، مجموع الأمطار، أيام الحرارة الشديدة، السجلات والاتجاه الخطي البسيط عندما تتوفر سنوات كافية. هذه النتائج تصف البيانات التاريخية ولا تمثل تنبؤًا بالمستقبل.</p><div class="methodology-warning"><i class="fas fa-circle-info"></i> لا نستنتج سببًا مناخيًا من رسم واحد، ولا نستخدم يومًا حارًا منفردًا كدليل على تغير مناخي.</div></div>
+      </section>
+
+      <section class="about-project-section" id="aboutProject" aria-labelledby="aboutProjectTitle">
+        <div><span class="section-kicker">عن SkyView</span><h2 class="section-title" id="aboutProjectTitle"><i class="fas fa-circle-info"></i> من تطبيق طقس إلى منصة مناخية</h2><p>المشكلة التي يعالجها المشروع هي صعوبة فهم الفرق بين الطقس والمناخ وقراءة البيانات التاريخية. الحل هو جمع الطقس الحالي، التحليل التاريخي، الرسوم التفاعلية والمحتوى التعليمي في تجربة واحدة.</p></div>
+        <div class="about-goals"><span>🌱 وعي مناخي</span><span>📊 قراءة البيانات</span><span>🌤️ فهم الطقس</span><span>💻 توظيف التكنولوجيا</span></div>
+      </section>
+
+      <section class="simple-weather-cta education-section" id="simpleWeatherCta" aria-labelledby="simpleWeatherCtaTitle">
+        <div class="section-header simple-weather-cta-header">
+          <div>
+            <span class="section-kicker">تجربة أبسط</span>
+            <h2 class="section-title" id="simpleWeatherCtaTitle"><i class="fas fa-cloud-sun" aria-hidden="true"></i> عايز الطقس بسرعة ومن غير التحليلات؟</h2>
+            <p class="simple-weather-cta-description">جرّب النسخة البسيطة من المشروع لمعرفة حالة الطقس والتوقعات في تجربة أخف وأسرع.</p>
+          </div>
+          <a class="simple-weather-cta-button" href="sample.html" target="_blank" rel="noopener noreferrer">
+            افتح النسخة البسيطة
+            <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          </a>
+        </div>
+      </section>
+
+      <section class="forecast-section" id="forecastSection" aria-label="التوقعات اليومية">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-calendar-week" aria-hidden="true"></i>
+            التوقعات اليومية
+          </h2>
+        </div>
+        <div class="forecast-grid" id="forecastGrid" role="list" aria-label="توقعات الأيام القادمة">
+          <div class="loading-cards">
+            <div class="loading-skeleton tall"></div>
+            <div class="loading-skeleton tall"></div>
+            <div class="loading-skeleton tall"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-section" id="infoSection" aria-label="معلومات إضافية">
+        <div class="info-grid">
+          <div class="info-card weather-tip-card">
+            <div class="info-card-header">
+              <i class="fas fa-lightbulb" aria-hidden="true"></i>
+              <h3>نصيحة الطقس</h3>
+            </div>
+            <div class="info-card-body">
+              <div class="tip-icon" id="tipIcon">🌤️</div>
+              <p class="tip-text" id="tipText">ابحث عن مدينة لرؤية نصيحة الطقس</p>
+            </div>
+          </div>
+          <div class="info-card air-quality-card">
+            <div class="info-card-header">
+              <i class="fas fa-wind" aria-hidden="true"></i>
+              <h3>جودة الهواء</h3>
+            </div>
+            <div class="info-card-body">
+              <div class="air-quality-meter">
+                <div class="aq-value" id="aqValue">--</div>
+                <div class="aq-label" id="aqLabel">--</div>
+                <div class="aq-bar-container"><div class="aq-bar" id="aqBar"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="info-card astro-card">
+            <div class="info-card-header">
+              <i class="fas fa-moon" aria-hidden="true"></i>
+              <h3>القمر والفلكيات</h3>
+            </div>
+            <div class="info-card-body">
+              <div class="astro-info">
+                <div class="astro-item">
+                  <i class="fas fa-moon" aria-hidden="true"></i>
+                  <span>طلوع القمر: <strong id="moonrise">--</strong></span>
+                </div>
+                <div class="astro-item">
+                  <i class="fas fa-moon" style="opacity:0.5" aria-hidden="true"></i>
+                  <span>غروب القمر: <strong id="moonset">--</strong></span>
+                </div>
+                <div class="astro-item">
+                  <span class="moon-phase-icon" id="moonPhaseIcon">🌕</span>
+                  <span>مرحلة القمر: <strong id="moonPhase">--</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-cloud-sun" aria-hidden="true"></i>
+          <span>SkyView Climate & Weather</span>
+        </div>
+        <p class="footer-text">
+          بيانات الطقس مقدمة من
+          <a href="https://www.weatherapi.com" target="_blank" rel="noopener noreferrer" class="footer-link">WeatherAPI.com</a>
+        </p>
+        <p class="footer-credits">
+          <i class="fas fa-heart" style="color:#e74c3c" aria-hidden="true"></i>
+          صُمم لربط الطقس بالبيانات والمناخ والتكنولوجيا
+        </p>
+        <p class="footer-update">
+          <i class="fas fa-rotate-right" aria-hidden="true"></i>
+          آخر تحديث: <span id="lastUpdate">--</span>
+        </p>
+      </div>
+    </footer>
+
+  </div>
+  <div class="about-modal hidden" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <div class="about-backdrop" id="aboutBackdrop"></div>
+
+      <div class="about-dialog" role="document">
+        <button
+          class="about-close"
+          id="aboutClose"
+          type="button"
+          aria-label="إغلاق نافذة من نحن"
+          title="إغلاق"
+        >
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+
+        <div class="about-icon" aria-hidden="true">
+          <i class="fas fa-cloud-sun"></i>
+        </div>
+
+        <div class="about-content">
+          <span class="about-eyebrow">عن المشروع</span>
+          <h2 id="aboutTitle">SkyView Climate & Weather</h2>
+
+          <p class="about-description">
+            
+          SkyView Climate & Weather منصة تعليمية وتفاعلية تجمع الطقس الحالي والتوقعات والتحليل التاريخي والرسوم البيانية لتوضيح الفرق بين الطقس والمناخ ودور التكنولوجيا في فهم البيانات البيئية.
+
+          </p>
+
+          <div class="about-section">
+            <h3><i class="fas fa-code" aria-hidden="true"></i> التقنيات المستخدمة</h3>
+            <div class="about-tags">
+              <span>HTML5</span>
+              <span>CSS3</span>
+              <span>Vanilla JavaScript</span>
+              <span>WeatherAPI</span>
+              <span>Geolocation API</span>
+              <span>Vercel Serverless Functions</span>
+              <span>OpenCage Geocoding</span>
+            </div>
+          </div>
+
+          <div class="about-section">
+            <h3><i class="fas fa-location-dot" aria-hidden="true"></i> تحديد الموقع</h3>
+            <p>
+              التطبيق بيستخدم Geolocation API للحصول على الـLatitude والـLongitude
+              من المتصفح، وبعدها بيستخدم الإحداثيات دي علشان يجيب حالة الطقس للموقع الحالي.
+              وكمان تقدر تبحث عن المدينة يدويًا من الـSearch Bar.
+            </p>
+          </div>
+
+          <div class="about-section about-highlight">
+            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+            <p>
+              الـAPI Key مش موجود في الـFrontend، وبيتم التعامل معاه من خلال
+              Vercel Serverless Functions وEnvironment Variables.
+            </p>
+          </div>
+
+          <div class="about-footer">
+            <span><i class="fas fa-user" aria-hidden="true"></i> Developed by Youssef Sameh</span>
+            <span><i class="fas fa-cloud-sun" aria-hidden="true"></i> SkyView Weather</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="explain-modal hidden" id="explainModal" role="dialog" aria-modal="true" aria-labelledby="explainTitle">
+      <div class="explain-backdrop" id="explainBackdrop"></div>
+      <div class="explain-dialog">
+        <button class="about-close" id="explainClose" type="button" aria-label="إغلاق"><i class="fas fa-times"></i></button>
+        <span class="about-eyebrow">شرح الرسم</span><h2 id="explainTitle">ماذا يعني هذا الرسم؟</h2><p id="explainText">--</p>
+      </div>
+    </div>
+
+    <div class="favorites-panel hidden" id="favoritesPanel" aria-label="المدن المفضلة">
+      <div class="favorites-panel-header">
+        <div>
+          <h2><i class="fas fa-heart"></i> المدن المفضلة</h2>
+          <p>احفظ المدن التي تتابعها للوصول إليها بسرعة.</p>
+        </div>
+        <button class="favorites-close" id="favoritesClose" aria-label="إغلاق"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="favorites-list" id="favoritesList"></div>
+      <div class="favorites-empty" id="favoritesEmpty">
+        <i class="far fa-heart"></i>
+        <p>لسه مفيش مدن في المفضلة.</p>
+        <span>ابحث عن مدينة واضغط القلب لحفظها.</span>
+      </div>
+    </div>
+  <button
+    class="scroll-top-btn"
+    id="scrollTopBtn"
+    aria-label="العودة لرأس الصفحة"
+    title="العودة للأعلى"
+    hidden
+  >
+    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    <svg class="scroll-progress" viewBox="0 0 36 36" aria-hidden="true">
+      <circle class="scroll-progress-bg" cx="18" cy="18" r="16"/>
+      <circle class="scroll-progress-fill" id="scrollProgressFill" cx="18" cy="18" r="16"/>
+    </svg>
+  </button>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/climate.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
